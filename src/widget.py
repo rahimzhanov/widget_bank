@@ -1,9 +1,9 @@
-from masks import get_mask_card_number
-from masks import get_mask_account
+from .masks import get_mask_card_number
+
 
 def mask_account_card(account_card: str) -> str:
-    code = ''
-    account = ''
+    code = ""
+    account = ""
 
     for char in account_card:
         if char.isdigit():
@@ -14,4 +14,5 @@ def mask_account_card(account_card: str) -> str:
     masked = account + get_mask_card_number(code)
     return masked
 
-#print(mask_account_card('Visa Platinum 7000792289606361'))
+
+# print(mask_account_card('Visa Platinum 7000792289606361'))
