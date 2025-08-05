@@ -2,19 +2,20 @@ from typing import List, Dict
 from datetime import datetime
 
 
-def filter_by_state(data: list[dict[str, int]]) -> list[dict]:
-    """Фильтрует словари по ключу state, оставляя только те,
-    где значение EXECUTED
-     Args:
-        data: Список словарей, содержащих ключ 'state'
-    Returns:
-        Новый список словарей, где значение у ключа 'state' -> 'EXECUTED'
-    """
+def filter_by_state(data: list[dict], state: str = "EXECUTED") -> list[dict]:
+    """Фильтрует словари по ключу state, оставляя только те, где значение равно переданному state.
 
+    Args:
+        data: Список словарей, содержащих ключ 'state'.
+        state: Значение для фильтрации (по умолчанию 'EXECUTED').
+
+    Returns:
+        Новый список словарей, где значение у ключа 'state' соответствует переданному.
+    """
     result = []
 
     for item in data:
-        if item.get("state") == "EXECUTED":
+        if item.get("state") == state:
             result.append(item)
     return result
 
