@@ -2,21 +2,29 @@ from masks import get_mask_card_number
 from masks import get_mask_account
 from datetime import datetime
 
+from typing import Union
+from masks import get_mask_account, get_mask_card_number  # type: ignore[import]
+
 
 def mask_account_card(account_card: str) -> str:
     """
-       Принимает строку с именем и номером карты или счета,
-       определяет номер это или счет за счет длины,
-       маскирует номер или счет используя
-       импортированные функции
+    Принимает строку с именем и номером карты или счета,
+    определяет тип (карта/счет) по длине номера,
+    возвращает строку с замаскированным номером.
 
-       Args:
-           account_card: строка с именем и номером или счетом
+    Args:
+        account_card: строка в формате "Имя Номер" или "Счет Номер"
 
-       Returns:
-           Строка в таком же формате, только замаскированный номер или счет
-       """
+    Returns:
+        Строка в формате "Имя МаскированныйНомер" или "Счет МаскированныйНомер"
 
+    Examples:
+        >>> mask_account_card("Visa Platinum 1234567890123456")
+        'Visa Platinum 1234 56** **** 3456'
+
+        >>> mask_account_card("Счет 12345678901234567890")
+        'Счет **7890'
+    """
     code = ""
     account = ""
 
@@ -26,12 +34,13 @@ def mask_account_card(account_card: str) -> str:
         else:
             account += char
 
+    masked_number: str
     if len(code) > 16:
-        masked = account + get_mask_account(code)
+        masked_number = get_mask_account(code)
     else:
-        masked = account + get_mask_card_number(code)
+        masked_number = get_mask_card_number(code)
 
-    return masked
+    return account + masked_number
 
 
 def get_date(date_str: str) -> str:
