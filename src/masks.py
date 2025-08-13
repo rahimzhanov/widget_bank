@@ -23,6 +23,6 @@ def get_mask_account(account_number: str) -> str:
     """
     if len(account_number) == 20 and account_number.isdigit():
         return f"**{account_number[-4:]}"
-    return "Номер счета должен содержать минимум 20 цифр"
+    return "Номер счета должен содержать 20 цифр"
 
 print(get_mask_account('12345678901234567890'))
