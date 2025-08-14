@@ -25,4 +25,4 @@ def get_mask_account(account_number: str) -> str:
         return f"**{account_number[-4:]}"
     return "Номер счета должен содержать 20 цифр"
 
-print(get_mask_account('12345678901234567890'))
+# print(get_mask_account('12345678901234567890'))
