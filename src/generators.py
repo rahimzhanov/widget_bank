@@ -1,20 +1,3 @@
-from pygments.styles.dracula import yellow
-
-
-def filter_by_currency(transactions: list[dict], currency: str) -> iter:
-    """
-    Фильтрует транзакции по заданной валюте и возвращает итератор.
-
-    :param transactions: Список словарей с транзакциями.
-    :param currency: Код валюты для фильтрации (например, "USD").
-    :return: Итератор, выдающий транзакции с заданной валютой.
-    """
-    for transaction in transactions:
-        operation_amount = transaction.get("operationAmount", {})
-        transaction_currency = operation_amount.get("currency", {}).get("code")
-        if transaction_currency == currency:
-            yield transaction
-
 transactions = [
     {
         "id": 939719570,
@@ -63,6 +46,23 @@ transactions = [
     },
 ]
 
+
+def filter_by_currency(transactions: list[dict], currency: str) -> iter:
+    """
+    Фильтрует транзакции по заданной валюте и возвращает итератор.
+
+    :param transactions: Список словарей с транзакциями.
+    :param currency: Код валюты для фильтрации (например, "USD").
+    :return: Итератор, выдающий транзакции с заданной валютой.
+    """
+    for transaction in transactions:
+        operation_amount = transaction.get("operationAmount", {})
+        transaction_currency = operation_amount.get("currency", {}).get("code")
+        if transaction_currency == currency:
+            yield transaction
+
+
+
 # usd_transactions = filter_by_currency(transactions, "USD")
 # for _ in range(2):
 #     print(next(usd_transactions))
@@ -99,6 +99,6 @@ def card_number_generator(start: int, end: int):
         formatted_card = f"{card_str[:4]} {card_str[4:8]} {card_str[8:12]} {card_str[12:16]}"
         yield formatted_card
 
-# Пример использования
-for card_number in card_number_generator(1, 5):
-            print(card_number)
+# # Пример использования
+# for card_number in card_number_generator(1, 5):
+#             print(card_number)
