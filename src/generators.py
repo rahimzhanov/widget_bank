@@ -1,3 +1,5 @@
+from pygments.styles.dracula import yellow
+
 
 def filter_by_currency(transactions: list[dict], currency: str) -> iter:
     """
@@ -83,3 +85,20 @@ def transaction_descriptions(transactions):
 # print(next(descriptions))  # "Перевод организации"
 # print(next(descriptions))  # "Перевод со счета на счет"
 # print(next(descriptions))  # "Перевод со счета на счет"
+
+def card_number_generator(start: int, end: int):
+    """
+    Генератор номеров банковских карт в формате XXXX XXXX XXXX XXXX.
+
+    :param start: Начальный номер карты (от 1)
+    :param end: Конечный номер карты (до 9999999999999999)
+    :yield: Номер карты в формате XXXX XXXX XXXX XXXX
+    """
+    for number in range(start, end + 1):
+        card_str = f"{number:016d}"
+        formatted_card = f"{card_str[:4]} {card_str[4:8]} {card_str[8:12]} {card_str[12:16]}"
+        yield formatted_card
+
+# Пример использования
+for card_number in card_number_generator(1, 5):
+            print(card_number)
