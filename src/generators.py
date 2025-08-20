@@ -99,6 +99,6 @@ def card_number_generator(start: int, end: int):
         formatted_card = f"{card_str[:4]} {card_str[4:8]} {card_str[8:12]} {card_str[12:16]}"
         yield formatted_card
 
-# # Пример использования
-# for card_number in card_number_generator(1, 5):
+# Пример использования
+# for card_number in card_number_generator(1, 3):
 #             print(card_number)
