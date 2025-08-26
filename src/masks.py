@@ -7,11 +7,9 @@ def get_mask_card_number(card_number: str) -> str:
     :param card_number: Номер карты для маскирования (строка из цифр)
     :return: Замаскированный номер карты в формате XXXX XX** **** XXXX
     """
-    if len(card_number) != 16 or not card_number.isdigit():
-        raise ValueError("Номер карты должен состоять из 16 цифр")
-
-    masked = f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
-    return masked
+    if len(card_number) == 16 and card_number.isdigit():
+         return f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
+    return "Номер карты должен состоять из 16 цифр"
 
 
 def get_mask_account(account_number: str) -> str:
@@ -23,8 +21,8 @@ def get_mask_account(account_number: str) -> str:
     :param account_number: Номер счета для маскирования (строка из цифр)
     :return: Замаскированный номер счета в формате **XXXX
     """
-    if len(account_number) < 20 or not account_number.isdigit():
-        raise ValueError("Номер счета должен содержать минимум 20 цифр")
+    if len(account_number) == 20 and account_number.isdigit():
+        return f"**{account_number[-4:]}"
+    return "Номер счета должен содержать 20 цифр"
 
-    masked = f"**{account_number[-20:]}"
-    return masked
+# print(get_mask_account('12345678901234567890'))
