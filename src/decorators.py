@@ -60,3 +60,27 @@ def log(filename=None):
         return wrapper
 
     return decorator
+
+# # Пример 1: Логирование в файл
+# @log(filename="mylog.txt")
+# def my_function(x, y):
+#     return x + y
+#
+# my_function(1, 2)  # Запишет "my_function ok" в mylog.txt
+#
+# # Пример 2: Логирование в консоль
+# @log()
+# def dangerous_division(a, b):
+#     return a / b
+#
+# try:
+#     dangerous_division(10, 0)
+# except ZeroDivisionError:
+#     pass  # В консоль выведется информация об ошибке
+#
+# # Пример 3: Функция с ключевыми аргументами
+# @log(filename="operations.log")
+# def complex_operation(x, y, multiplier=1):
+#     return (x + y) * multiplier
+#
+# complex_operation(2, 3, multiplier=5)  # Запишет успех в operations.log
