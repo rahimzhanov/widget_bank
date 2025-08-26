@@ -13,12 +13,19 @@ def log(filename=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # Формируем информацию о входных параметрах
+            # Формируем информацию о входных параметрах в правильном формате
             args_str = ", ".join(repr(arg) for arg in args)
             kwargs_str = ", ".join(f"{k}={repr(v)}" for k, v in kwargs.items())
-            inputs_str = f"({args_str})"
-            if kwargs_str:
-                inputs_str += f", {{{kwargs_str}}}"
+
+            # Формируем строку входных параметров
+            if not args and not kwargs:
+                inputs_str = "()"
+            elif not kwargs:
+                inputs_str = f"({args_str})"
+            elif not args:
+                inputs_str = f"{{{kwargs_str}}}"
+            else:
+                inputs_str = f"({args_str}), {{{kwargs_str}}}"
 
             try:
                 # Выполняем функцию
