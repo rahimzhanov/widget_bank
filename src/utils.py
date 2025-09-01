@@ -57,12 +57,32 @@ load_dotenv()
 
 data_operations = '../data/operations.json'
 
-def open_json(path: str) -> list:
+
+def open_json(path: str) -> list[Any]:
+    """
+    Открывает и загружает JSON файл.
+
+    Args:
+        path (str): Путь к JSON файлу
+
+    Returns:
+        List[Any]: Данные из файла или пустой список в случае ошибки
+    """
     try:
         with open(path, 'r', encoding="utf-8") as f:
             data = json.load(f)
         return data
+
+    except FileNotFoundError:
+        print(f"Ошибка: Файл '{path}' не найден")
+        return []
+
+    except json.JSONDecodeError as e:
+        print(f"Ошибка декодирования JSON в файле '{path}': {e}")
+        return []
+
     except Exception as error:
+        print(f"Неизвестная ошибка при открытии файла '{path}': {error}")
         return []
 
 
@@ -70,7 +90,7 @@ def convert_amount(item):
     currency = item['operationAmount']['currency']['code']
     amount = item['operationAmount']['amount']
     if currency == "RUB":
-        return f'Сумма транзакции - {amount} руб.'
+        return f'Сумма транзакции - {float(amount)} руб.'
     else:
         result = convert_rub_currency(currency, amount)
         return f'Сумма транзакции - {result} руб.'
