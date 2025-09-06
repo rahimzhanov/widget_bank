@@ -1,13 +1,23 @@
 import os
-from typing import Any
-import  requests
 import json
+from typing import Any
+
+import requests
 from dotenv import load_dotenv
+
 
 # Загрузка переменных из .env-файла
 load_dotenv()
 
+
 def convert_rub_currency(currency: str, amount: str) -> float:
+    """
+    Конвертирует сумму из указанной валюты в рубли.
+
+    :param currency: Исходная валюта (например, "USD", "EUR")
+    :param amount: Сумма для конвертации
+    :return: Сумма в рублях как float
+    """
     to = "RUB"
     url = f"https://api.apilayer.com/exchangerates_data/convert?to={to}&from={currency}&amount={amount}"
 
@@ -22,8 +32,9 @@ def convert_rub_currency(currency: str, amount: str) -> float:
         else:
             result = response.json().get("result")
             return float(result) if result is not None else float(amount)
-    except:
+    except Exception:
         return float(amount)  # При любой ошибке возвращаем float
 
-if __name__ == '__main__':
-    print(convert_rub_currency("EUR", "100"))
+
+# if __name__ == '__main__':
+#     print(convert_rub_currency("EUR", "100"))

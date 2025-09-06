@@ -8,6 +8,7 @@ file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(m
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
+
 def get_mask_card_number(card_number: str) -> str:
     """
     Маскирует номер банковской карты, оставляя первые 6 и
@@ -40,7 +41,8 @@ def get_mask_account(account_number: str) -> str:
     else:
         logger.warning("Номер счета должен содержать 20 цифр")
         return "Номер счета должен содержать 20 цифр"
-#
+
+
 # if __name__ == '__main__':
-#     print(get_mask_card_number('1234567890123456'))
-#     print(get_mask_account('12345678901234567890'))
+#   print(get_mask_card_number('1234567890123456'))
+#   print(get_mask_account('12345678901234567890'))
