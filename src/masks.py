@@ -1,3 +1,14 @@
+import logging
+
+
+logger = logging.getLogger("masks")
+logger.setLevel(logging.INFO)
+file_handler = logging.FileHandler('../logs/masks.log', encoding="utf-8")
+file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+
 def get_mask_card_number(card_number: str) -> str:
     """
     Маскирует номер банковской карты, оставляя первые 6 и
@@ -8,8 +19,11 @@ def get_mask_card_number(card_number: str) -> str:
     :return: Замаскированный номер карты в формате XXXX XX** **** XXXX
     """
     if len(card_number) == 16 and card_number.isdigit():
-         return f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
-    return "Номер карты должен состоять из 16 цифр"
+        logger.info(f"Карта успешно замаскирована - {card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}")
+        return f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
+    else:
+        logger.warning("Номер карты должен состоять из 16 цифр")
+        return "Номер карты должен состоять из 16 цифр"
 
 
 def get_mask_account(account_number: str) -> str:
@@ -22,7 +36,13 @@ def get_mask_account(account_number: str) -> str:
     :return: Замаскированный номер счета в формате **XXXX
     """
     if len(account_number) == 20 and account_number.isdigit():
+        logger.info(f'Банковский счет успешно замаскирован - **{account_number[-4:]}')
         return f"**{account_number[-4:]}"
-    return "Номер счета должен содержать 20 цифр"
+    else:
+        logger.warning("Номер счета должен содержать 20 цифр")
+        return "Номер счета должен содержать 20 цифр"
 
-# print(get_mask_account('12345678901234567890'))
+
+# if __name__ == '__main__':
+#   print(get_mask_card_number('1234567890123456'))
+#   print(get_mask_account('12345678901234567890'))
