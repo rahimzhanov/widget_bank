@@ -4,6 +4,7 @@ import json
 from src.external_api import convert_rub_currency
 from dotenv import load_dotenv
 import logging
+from file_operations import read_csv_to_list, read_excel_to_list  #
 
 # Настройка базового логирования
 # logging.basicConfig(
@@ -24,6 +25,11 @@ logger.addHandler(file_handler)
 
 # Загрузка переменных из .env-файла
 load_dotenv()
+
+# Путь к CSV файлу
+data_operations_csv = '../data/transactions.csv'
+# Путь к Excel файлу
+data_operations_excel = '../data/transactions_excel.xlsx'
 
 transactions = [
     {
@@ -80,12 +86,6 @@ data_operations = '../data/operations.json'
 def open_json(path: str) -> list[Any]:
     """
     Открывает и загружает JSON файл.
-
-    Args:
-        path (str): Путь к JSON файлу
-
-    Returns:
-        List[Any]: Данные из файла или пустой список в случае ошибки
     """
     try:
         logger.info(f"Попытка открыть файл: {path}")
@@ -93,15 +93,12 @@ def open_json(path: str) -> list[Any]:
             data = json.load(f)
         logger.info(f"Файл успешно загружен, получено {len(data)} записей")
         return data
-
     except FileNotFoundError:
         logger.error(f"Файл '{path}' не найден")
         return []
-
     except json.JSONDecodeError as e:
         logger.error(f"Ошибка декодирования JSON в файле '{path}': {e}")
         return []
-
     except Exception as error:
         logger.error(f"Неизвестная ошибка при открытии файла '{path}': {error}")
         return []
@@ -112,41 +109,50 @@ def convert_amount(item):
     Конвертирует сумму транзакции в рубли.
     """
     try:
-        currency = item['operationAmount']['currency']['code']
-        amount = item['operationAmount']['amount']
-
-        logger.debug(f"Конвертация: валюта={currency}, сумма={amount}")
+        # Для CSV данных (ваша структура)
+        if 'currency_code' in item and 'amount' in item:
+            currency = item['currency_code']
+            amount = item['amount']
+        # Для оригинальных JSON данных
+        elif 'operationAmount' in item and isinstance(item['operationAmount'], dict):
+            currency = item['operationAmount']['currency']['code']
+            amount = item['operationAmount']['amount']
+        # Для плоского CSV с точками
+        elif 'operationAmount.currency.code' in item:
+            currency = item['operationAmount.currency.code']
+            amount = item['operationAmount.amount']
+        else:
+            return "Ошибка: неверный формат данных транзакции"
 
         if currency == "RUB":
-            result = f'Сумма транзакции - {float(amount)} руб.'
-            logger.debug(f"Конвертация не требуется (RUB): {result}")
-            return result
+            return f'Сумма транзакции - {float(amount)} руб.'
         else:
             result = convert_rub_currency(currency, amount)
-            converted_result = f'Сумма транзакции - {result} руб.'
-            logger.info(f"Успешная конвертация {amount} {currency} -> {result} RUB")
-            return converted_result
+            return f'Сумма транзакции - {result} руб.'
 
-    except KeyError as e:
-        logger.error(f"Отсутствует обязательное поле в данных транзакции: {e}")
+    except KeyError:
         return "Ошибка: неверный формат данных транзакции"
-    except Exception as e:
-        logger.error(f"Ошибка при конвертации суммы: {e}")
+    except Exception:
         return "Ошибка при конвертации суммы"
 
-
-# Вариант 1: работа с файлом
+# Вариант 1: работа с JSON файлом
 # if __name__ == '__main__':
 #     data = open_json(data_operations)
 #     for item in data:
 #         result = convert_amount(item)
 #         print(result)
 
+# Вариант 2: работа с CSV файлом
+if __name__ == '__main__':
+    data = read_csv_to_list(data_operations_csv)  # Используем новую функцию
+    for item in data:
+        result = convert_amount(item)
+        print(result)
 
-# Вариант 2: работа с готовыми транзакциями
+# Вариант 3: работа с Excel файлом
 # if __name__ == '__main__':
-#     logger.info("Запуск приложения")
-#     for item in transactions:
+#     data = read_excel_to_list(data_operations_excel)  # Используем новую функцию
+#     for item in data:
 #         result = convert_amount(item)
 #         print(result)
-#     logger.info("Приложение завершило работу")
+
