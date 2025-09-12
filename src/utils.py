@@ -4,7 +4,7 @@ import json
 from src.external_api import convert_rub_currency
 from dotenv import load_dotenv
 import logging
-from file_operations import read_csv_to_list, read_excel_to_list  #
+from src.file_operations import read_csv_to_list, read_excel_to_list  #
 
 # Настройка базового логирования
 # logging.basicConfig(
@@ -18,7 +18,7 @@ from file_operations import read_csv_to_list, read_excel_to_list  #
 
 logger = logging.getLogger("utils")
 logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler('../logs/utils.log', encoding="utf-8")
+file_handler = logging.FileHandler('./logs/utils.log', encoding="utf-8")
 file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
@@ -143,11 +143,11 @@ def convert_amount(item):
 #         print(result)
 
 # Вариант 2: работа с CSV файлом
-if __name__ == '__main__':
-    data = read_csv_to_list(data_operations_csv)  # Используем новую функцию
-    for item in data:
-        result = convert_amount(item)
-        print(result)
+# if __name__ == '__main__':
+#     data = read_csv_to_list(data_operations_csv)  # Используем новую функцию
+#     for item in data:
+#         result = convert_amount(item)
+#         print(result)
 
 # Вариант 3: работа с Excel файлом
 # if __name__ == '__main__':

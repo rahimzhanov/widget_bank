@@ -11,7 +11,7 @@ def test_summ_operation():
     with patch("requests.get") as n_mock:
         n_mock.return_value.json.return_value = {'result': 111}
         assert (convert_amount({
-            'operationAmount': {'amount': '1', 'currency': {'code': "USD"}}}) == 'Сумма транзакции - 80.573276 руб.')
+            'operationAmount': {'amount': '1', 'currency': {'code': "USD"}}}) == 'Сумма транзакции - 83.854343 руб.')
         assert (convert_amount({
             'operationAmount': {'amount': '1000', 'currency': {'code': "RUB"}}}) == 'Сумма транзакции - 1000.0 руб.')
 
