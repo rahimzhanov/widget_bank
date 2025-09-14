@@ -1,5 +1,7 @@
+import re
 from typing import List, Dict
 from datetime import datetime
+
 
 
 def filter_by_state(data: list[dict], state: str = "EXECUTED") -> list[dict]:
@@ -37,3 +39,26 @@ def sort_by_date(data: List[Dict], reverse: bool = True) -> List[Dict]:
         key=lambda x: datetime.fromisoformat(x["date"]),
         reverse=reverse
     )
+
+
+def filter_by_description(data: List[Dict], search_pattern: str) -> list[Dict]:
+    """
+       Фильтрует транзакции по описанию с использованием регулярных выражений.
+
+       Args:
+           data: Список словарей с транзакциями
+           search_pattern: Строка для поиска в описании
+
+       Returns:
+           Список отфильтрованных транзакций
+       """
+    result = []
+
+    for transaction in data:
+        description = transaction.get('description', "")
+
+        # Используем регулярное выражение для регистронезависимого поиска
+        if re.search(search_pattern, description, re.IGNORECASE):
+            result.append(transaction)
+
+    return result

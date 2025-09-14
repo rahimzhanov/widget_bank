@@ -137,7 +137,7 @@ def convert_amount(item):
 
 # Вариант 1: работа с JSON файлом
 # if __name__ == '__main__':
-#     data = open_json(data_operations)
+#     data = open_json(data_operatns)
 #     for item in data:
 #         result = convert_amount(item)
 #         print(result)
