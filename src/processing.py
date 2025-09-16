@@ -62,3 +62,25 @@ def filter_by_description(data: List[Dict], search_pattern: str) -> list[Dict]:
             result.append(transaction)
 
     return result
+
+
+def process_bank_operations(data:list[dict], categories:list) -> dict:
+    """
+        Подсчитывает количество операций для каждой указанной категории
+
+        Args:
+            data: Список словарей с транзакциями
+            categories: список категорий для подсчета
+        Returns:
+            Словарь с количеством операций по каждой категории
+    """
+    result = {category.lower(): 0 for category in categories}
+
+    for transaction in data:
+        description = transaction.get('description', '').lower()
+
+        # Если описание есть в списке интересующих категорий
+        if description in result:
+            result[description] += 1
+
+    return result
