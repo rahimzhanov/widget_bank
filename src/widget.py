@@ -1,9 +1,11 @@
+from typing import Any
+
 from src.masks import get_mask_card_number
 from src.masks import get_mask_account
 from datetime import datetime
 
 
-def mask_account_card(account_card: str) -> str:
+def mask_account_card(account_card: Any) -> str:
     """
     Принимает строку с именем и номером карты или счета,
     определяет тип (карта/счет) по длине номера,
@@ -22,6 +24,21 @@ def mask_account_card(account_card: str) -> str:
         >>> mask_account_card("Счет 12345678901234567890")
         'Счет **7890'
     """
+    # Обрабатываем None и пустые значения
+    if account_card is None or account_card == '':
+        return ""
+
+    # Преобразуем числа в строки
+    if isinstance(account_card, (int, float)):
+        # Проверяем на NaN (особое значение float)
+        if isinstance(account_card, float) and account_card != account_card:
+            return ""
+        account_card = str(int(account_card))
+
+    # Если это не строка, преобразуем
+    if not isinstance(account_card, str):
+        account_card = str(account_card)
+
     code = ""
     account = ""
 
@@ -78,6 +95,5 @@ def get_date(date_str: str) -> str:
         return f"Ошибка: Непредвиденная проблема при обработке даты ({str(e)})"
 
 
-
-print(get_date('2024-03-11T02:26:18.671407'))
+# print(get_date('2024-03-11T02:26:18.671407'))
 # print(mask_account_card('Счет 73654108430135874305'))
