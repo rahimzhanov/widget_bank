@@ -1,14 +1,21 @@
 import logging
+import os
+from pathlib import Path
 
+# Получаем абсолютный путь к директории проекта
+BASE_DIR = Path(__file__).resolve().parent.parent
+LOG_DIR = BASE_DIR / 'logs'
+LOG_FILE = LOG_DIR / 'masks.log'
+
+# Создаем директорию для логов, если она не существует
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 logger = logging.getLogger("masks")
 logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler('../logs/masks.log', encoding="utf-8")
+file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
 file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
-
-
 def get_mask_card_number(card_number: str) -> str:
     """
     Маскирует номер банковской карты, оставляя первые 6 и

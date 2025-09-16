@@ -8,27 +8,64 @@ def test_open_json():
 
 
 def test_summ_operation():
-    with patch("requests.get") as n_mock:
-        n_mock.return_value.json.return_value = {'result': 111}
-        assert (convert_amount({
-            'operationAmount': {'amount': '1', 'currency': {'code': "USD"}}}) == 'Сумма транзакции - 83.854343 руб.')
-        assert (convert_amount({
-            'operationAmount': {'amount': '1000', 'currency': {'code': "RUB"}}}) == 'Сумма транзакции - 1000.0 руб.')
+    """Тест конвертации суммы операции из USD в RUB"""
+    with patch("src.utils.convert_rub_currency") as mock_convert:
+        # Мокируем конвертацию: 1 USD = 83.854343 RUB
+        mock_convert.return_value = 83.854343
+
+        result = convert_amount({
+            'operationAmount': {
+                'amount': '1',
+                'currency': {'code': "USD"}
+            }
+        })
+
+        # Проверяем, что функция конвертации вызвана с правильными параметрами
+        mock_convert.assert_called_once_with("USD", "1")
+
+        # Проверяем результат конвертации
+        assert result == 'Сумма транзакции - 83.854343 руб.'
 
 
 def test_convert_amount_csv_data():
-    """Тест конвертации для CSV данных"""
+    """Тест конвертации для JSON данных (после преобразования из CSV)"""
     with patch('src.utils.convert_rub_currency') as mock_convert:
         mock_convert.return_value = 7500.0
 
+        # Передаем данные в JSON-формате (как после преобразования из CSV)
         item = {
-            'amount': '100.0',
-            'currency_code': 'USD'
+            'operationAmount': {
+                'amount': '100.0',
+                'currency': {
+                    'code': 'USD'
+                }
+            }
         }
         result = convert_amount(item)
 
+        # Проверяем вызов конвертации
+        mock_convert.assert_called_once_with("USD", "100.0")
+
+        # Проверяем результат
         assert result == 'Сумма транзакции - 7500.0 руб.'
-        mock_convert.assert_called_once_with('USD', '100.0')
+
+
+def test_convert_amount_rub():
+    """Тест для RUB валюты (без конвертации)"""
+    # Не нужно мокировать convert_rub_currency, так как для RUB она не вызывается
+
+    item = {
+        'operationAmount': {
+            'amount': '5000.0',
+            'currency': {
+                'code': 'RUB'
+            }
+        }
+    }
+    result = convert_amount(item)
+
+    # Для RUB просто возвращаем сумму
+    assert result == 'Сумма транзакции - 5000.0 руб.'
 
 
 def test_convert_amount_invalid_format():

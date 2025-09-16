@@ -4,21 +4,20 @@ import json
 from src.external_api import convert_rub_currency
 from dotenv import load_dotenv
 import logging
+from pathlib import Path
 from src.file_operations import read_csv_to_list, read_excel_to_list  #
 
-# Настройка базового логирования
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format='%(asctime)s - %(levelname)s - %(message)s',
-#     handlers=[
-#         logging.FileHandler("utils.log", encoding="utf-8"),
-# #         logging.StreamHandler()
-# #     ]
-# # )
+# Получаем абсолютный путь к директории проекта
+BASE_DIR = Path(__file__).resolve().parent.parent
+LOG_DIR = BASE_DIR / 'logs'
+LOG_FILE = LOG_DIR / 'utils.log'
+
+# Создаем директорию для логов, если она не существует
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 logger = logging.getLogger("utils")
 logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler('../logs/utils.log', encoding="utf-8")
+file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
 file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
